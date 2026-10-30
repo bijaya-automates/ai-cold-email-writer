@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>AI Cold Email Writer</title>
 
   <style>
@@ -13,120 +14,267 @@
 
     body {
       margin: 0;
-      padding: 30px 15px;
-      font-family: Arial, sans-serif;
-      background: #f1f5f9;
-      color: #1e293b;
+      padding: 40px 16px;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f3f5fb;
+      color: #202943;
     }
 
     .container {
-      max-width: 700px;
-      margin: auto;
-      background: white;
-      padding: 30px;
-      border-radius: 14px;
-      box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 35px;
+      background: #ffffff;
+      border: 1px solid #e5e9f2;
+      border-radius: 18px;
+      box-shadow: 0 12px 35px rgba(35, 48, 85, 0.08);
+    }
+
+    .top-label {
+      display: inline-block;
+      padding: 7px 13px;
+      border-radius: 20px;
+      background: #eeeaff;
+      color: #6952cb;
+      font-size: 12px;
+      font-weight: bold;
+      letter-spacing: 1px;
     }
 
     h1 {
+      margin: 18px 0 8px;
       text-align: center;
-      color: #1d4ed8;
-      margin-bottom: 8px;
+      font-size: 34px;
+      color: #202943;
+    }
+
+    h1 span {
+      color: #7059d7;
     }
 
     .subtitle {
+      margin-bottom: 30px;
       text-align: center;
-      color: #64748b;
-      margin-bottom: 25px;
+      color: #78829a;
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    .section-title {
+      margin: 25px 0 16px;
+      color: #53617e;
+      font-size: 13px;
+      font-weight: bold;
+      letter-spacing: 1px;
+      text-transform: uppercase;
     }
 
     label {
       display: block;
-      margin: 16px 0 7px;
-      font-weight: bold;
+      margin: 17px 0 8px;
+      color: #34415d;
+      font-size: 14px;
+      font-weight: 600;
     }
 
-    input, textarea, select {
+    input,
+    textarea,
+    select {
       width: 100%;
-      padding: 12px;
-      border: 1px solid #cbd5e1;
-      border-radius: 7px;
+      padding: 13px 14px;
+      border: 1px solid #dce2ee;
+      border-radius: 9px;
+      background: #fbfcff;
+      color: #29344d;
       font-size: 15px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      border-color: #8876e5;
+      box-shadow: 0 0 0 3px rgba(136, 118, 229, 0.12);
     }
 
     textarea {
-      min-height: 85px;
+      min-height: 95px;
       resize: vertical;
+      line-height: 1.5;
     }
 
-    button {
+    .hint {
+      display: block;
+      margin-top: 6px;
+      color: #8a93a8;
+      font-size: 12px;
+    }
+
+    .generate-btn {
       width: 100%;
-      padding: 14px;
-      margin-top: 22px;
+      margin-top: 27px;
+      padding: 16px;
       border: none;
-      border-radius: 7px;
-      background: #2563eb;
-      color: white;
+      border-radius: 10px;
+      background: linear-gradient(100deg, #7358df, #477fe5);
+      color: #ffffff;
       font-size: 16px;
+      font-weight: bold;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      transition: transform 0.2s, opacity 0.2s;
+    }
+
+    .generate-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .generate-btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.65;
+      transform: none;
+    }
+
+    #status {
+      margin-top: 18px;
+      text-align: center;
+      font-size: 14px;
+      color: #596781;
+      line-height: 1.5;
+    }
+
+    .result-card {
+      display: none;
+      margin-top: 25px;
+      padding: 20px;
+      border: 1px solid #e1e5f1;
+      border-radius: 12px;
+      background: #f8f9fd;
+    }
+
+    .result-card h2 {
+      margin: 0 0 15px;
+      color: #33415f;
+      font-size: 18px;
+    }
+
+    #emailResult {
+      min-height: 150px;
+      color: #303d57;
+      font-size: 15px;
+      line-height: 1.7;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    .copy-btn {
+      display: none;
+      width: 100%;
+      margin-top: 14px;
+      padding: 13px;
+      border: 1px solid #c9c2f2;
+      border-radius: 9px;
+      background: #eeeaff;
+      color: #6651be;
+      font-size: 15px;
       font-weight: bold;
       cursor: pointer;
     }
 
-    button:hover {
-      background: #1d4ed8;
-    }
-
-    #resultBox {
-      display: none;
-      margin-top: 25px;
-      padding: 18px;
-      background: #f8fafc;
-      border: 1px solid #cbd5e1;
-      border-radius: 8px;
-      white-space: pre-wrap;
-      line-height: 1.6;
-    }
-
-    #copyBtn {
-      background: #0f766e;
-      display: none;
-    }
-
-    #status {
-      margin-top: 15px;
+    .footer {
+      margin-top: 28px;
       text-align: center;
-      color: #475569;
+      color: #9aa2b4;
+      font-size: 12px;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 20px 12px;
+      }
+
+      .container {
+        padding: 23px 18px;
+      }
+
+      h1 {
+        font-size: 28px;
+      }
     }
   </style>
 </head>
 
 <body>
 
-  <div class="container">
+  <main class="container">
 
-    <h1>AI Cold Email Writer</h1>
+    <div style="text-align:center;">
+      <span class="top-label">AI POWERED WRITING</span>
+    </div>
+
+    <h1>AI <span>Cold Email</span> Writer</h1>
+
     <p class="subtitle">
-      Create professional and personalized cold emails using AI.
+      Create personalized, professional and engaging cold emails with AI.
     </p>
 
     <form id="emailForm">
 
-      <label>Your Name</label>
-      <input type="text" id="yourName" placeholder="Enter your name" required>
+      <div class="section-title">01 — Prospect Details</div>
 
-      <label>Recipient Name</label>
-      <input type="text" id="recipientName" placeholder="Enter recipient name">
+      <label for="recipientName">Target Prospect Name *</label>
+      <input
+        type="text"
+        id="recipientName"
+        placeholder="e.g. John Smith"
+        required
+      >
 
-      <label>Company Name</label>
-      <input type="text" id="company" placeholder="Enter company name" required>
+      <label for="recipientEmail">Target Email Address *</label>
+      <input
+        type="email"
+        id="recipientEmail"
+        placeholder="e.g. john@company.com"
+        required
+      >
 
-      <label>Purpose of Email</label>
-      <textarea id="purpose" placeholder="Why do you want to contact them?" required></textarea>
+      <label for="company">Company Name *</label>
+      <input
+        type="text"
+        id="company"
+        placeholder="e.g. ABC Technologies"
+        required
+      >
 
-      <label>Your Professional Background</label>
-      <textarea id="background" placeholder="Mention your skills, experience or services" required></textarea>
+      <div class="section-title">02 — Your Offer</div>
 
-      <label>Email Tone</label>
+      <label for="purpose">What's the Offer? *</label>
+      <textarea
+        id="purpose"
+        placeholder="Describe the service, product or opportunity you want to offer..."
+        required
+      ></textarea>
+
+      <div class="section-title">03 — Your Information</div>
+
+      <label for="yourName">Your Name *</label>
+      <input
+        type="text"
+        id="yourName"
+        placeholder="Enter your name"
+        required
+      >
+
+      <label for="background">Your Professional Background *</label>
+      <textarea
+        id="background"
+        placeholder="Describe your skills, experience or business..."
+        required
+      ></textarea>
+
+      <label for="tone">Choose Email Tone</label>
       <select id="tone">
         <option value="Professional">Professional</option>
         <option value="Friendly">Friendly</option>
@@ -134,46 +282,71 @@
         <option value="Formal">Formal</option>
       </select>
 
-      <button type="submit" id="generateBtn">
-        Generate Cold Email
+      <button
+        type="submit"
+        class="generate-btn"
+        id="generateBtn"
+      >
+        GENERATE COLD EMAIL ✦
       </button>
 
     </form>
 
-    <p id="status"></p>
+    <p id="status" aria-live="polite"></p>
 
-    <div id="resultBox"></div>
+    <section class="result-card" id="resultCard">
+      <h2>Your Generated Email</h2>
+      <div id="emailResult"></div>
+    </section>
 
-    <button type="button" id="copyBtn">
-      Copy Email
+    <button
+      type="button"
+      class="copy-btn"
+      id="copyBtn"
+    >
+      COPY EMAIL
     </button>
 
-  </div>
+    <div class="footer">
+      Built with AI • OpenAI API • n8n Automation
+    </div>
+
+  </main>
 
   <script>
+    // We will add our n8n Production Webhook URL later.
     const webhookUrl = "PASTE_N8N_PRODUCTION_WEBHOOK_URL_HERE";
 
     const form = document.getElementById("emailForm");
-    const resultBox = document.getElementById("resultBox");
     const status = document.getElementById("status");
     const generateBtn = document.getElementById("generateBtn");
+    const resultCard = document.getElementById("resultCard");
+    const emailResult = document.getElementById("emailResult");
     const copyBtn = document.getElementById("copyBtn");
 
     form.addEventListener("submit", async function(event) {
       event.preventDefault();
 
+      if (webhookUrl === "PASTE_N8N_PRODUCTION_WEBHOOK_URL_HERE") {
+        status.textContent = "Please connect your n8n webhook first.";
+        return;
+      }
+
       const formData = {
-        yourName: document.getElementById("yourName").value,
-        recipientName: document.getElementById("recipientName").value,
-        company: document.getElementById("company").value,
-        purpose: document.getElementById("purpose").value,
-        background: document.getElementById("background").value,
+        recipientName: document.getElementById("recipientName").value.trim(),
+        recipientEmail: document.getElementById("recipientEmail").value.trim(),
+        company: document.getElementById("company").value.trim(),
+        purpose: document.getElementById("purpose").value.trim(),
+        yourName: document.getElementById("yourName").value.trim(),
+        background: document.getElementById("background").value.trim(),
         tone: document.getElementById("tone").value
       };
 
-      status.textContent = "Generating your cold email...";
       generateBtn.disabled = true;
-      resultBox.style.display = "none";
+      generateBtn.textContent = "GENERATING EMAIL...";
+      status.textContent = "Your AI email is being prepared...";
+
+      resultCard.style.display = "none";
       copyBtn.style.display = "none";
 
       try {
@@ -189,28 +362,37 @@
           throw new Error("Request failed: " + result.status);
         }
 
-        const data = await result.text();
+        const contentType = result.headers.get("content-type") || "";
+        let emailText;
 
-        resultBox.textContent = data;
-        resultBox.style.display = "block";
+        if (contentType.includes("application/json")) {
+          const data = await result.json();
+          emailText = data.output || data.email || data.text || JSON.stringify(data, null, 2);
+        } else {
+          emailText = await result.text();
+        }
+
+        emailResult.textContent = emailText;
+        resultCard.style.display = "block";
         copyBtn.style.display = "block";
-        status.textContent = "Your cold email is ready!";
+        status.textContent = "Your cold email has been generated successfully!";
 
       } catch (error) {
+        console.error("Cold email error:", error);
         status.textContent = "Connection failed. Please check n8n and webhook settings.";
-        console.error(error);
 
       } finally {
         generateBtn.disabled = false;
+        generateBtn.textContent = "GENERATE COLD EMAIL ✦";
       }
     });
 
     copyBtn.addEventListener("click", async function() {
       try {
-        await navigator.clipboard.writeText(resultBox.textContent);
+        await navigator.clipboard.writeText(emailResult.textContent);
         status.textContent = "Email copied successfully!";
       } catch (error) {
-        status.textContent = "Copy failed. Please select and copy the email manually.";
+        status.textContent = "Copy failed. Please copy the email manually.";
       }
     });
   </script>
