@@ -1,0 +1,219 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Cold Email Writer</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 30px 15px;
+      font-family: Arial, sans-serif;
+      background: #f1f5f9;
+      color: #1e293b;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      border-radius: 14px;
+      box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+    }
+
+    h1 {
+      text-align: center;
+      color: #1d4ed8;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #64748b;
+      margin-bottom: 25px;
+    }
+
+    label {
+      display: block;
+      margin: 16px 0 7px;
+      font-weight: bold;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 7px;
+      font-size: 15px;
+    }
+
+    textarea {
+      min-height: 85px;
+      resize: vertical;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      margin-top: 22px;
+      border: none;
+      border-radius: 7px;
+      background: #2563eb;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #1d4ed8;
+    }
+
+    #resultBox {
+      display: none;
+      margin-top: 25px;
+      padding: 18px;
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      white-space: pre-wrap;
+      line-height: 1.6;
+    }
+
+    #copyBtn {
+      background: #0f766e;
+      display: none;
+    }
+
+    #status {
+      margin-top: 15px;
+      text-align: center;
+      color: #475569;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <h1>AI Cold Email Writer</h1>
+    <p class="subtitle">
+      Create professional and personalized cold emails using AI.
+    </p>
+
+    <form id="emailForm">
+
+      <label>Your Name</label>
+      <input type="text" id="yourName" placeholder="Enter your name" required>
+
+      <label>Recipient Name</label>
+      <input type="text" id="recipientName" placeholder="Enter recipient name">
+
+      <label>Company Name</label>
+      <input type="text" id="company" placeholder="Enter company name" required>
+
+      <label>Purpose of Email</label>
+      <textarea id="purpose" placeholder="Why do you want to contact them?" required></textarea>
+
+      <label>Your Professional Background</label>
+      <textarea id="background" placeholder="Mention your skills, experience or services" required></textarea>
+
+      <label>Email Tone</label>
+      <select id="tone">
+        <option value="Professional">Professional</option>
+        <option value="Friendly">Friendly</option>
+        <option value="Confident">Confident</option>
+        <option value="Formal">Formal</option>
+      </select>
+
+      <button type="submit" id="generateBtn">
+        Generate Cold Email
+      </button>
+
+    </form>
+
+    <p id="status"></p>
+
+    <div id="resultBox"></div>
+
+    <button type="button" id="copyBtn">
+      Copy Email
+    </button>
+
+  </div>
+
+  <script>
+    const webhookUrl = "PASTE_N8N_PRODUCTION_WEBHOOK_URL_HERE";
+
+    const form = document.getElementById("emailForm");
+    const resultBox = document.getElementById("resultBox");
+    const status = document.getElementById("status");
+    const generateBtn = document.getElementById("generateBtn");
+    const copyBtn = document.getElementById("copyBtn");
+
+    form.addEventListener("submit", async function(event) {
+      event.preventDefault();
+
+      const formData = {
+        yourName: document.getElementById("yourName").value,
+        recipientName: document.getElementById("recipientName").value,
+        company: document.getElementById("company").value,
+        purpose: document.getElementById("purpose").value,
+        background: document.getElementById("background").value,
+        tone: document.getElementById("tone").value
+      };
+
+      status.textContent = "Generating your cold email...";
+      generateBtn.disabled = true;
+      resultBox.style.display = "none";
+      copyBtn.style.display = "none";
+
+      try {
+        const result = await fetch(webhookUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(formData)
+        });
+
+        if (!result.ok) {
+          throw new Error("Request failed: " + result.status);
+        }
+
+        const data = await result.text();
+
+        resultBox.textContent = data;
+        resultBox.style.display = "block";
+        copyBtn.style.display = "block";
+        status.textContent = "Your cold email is ready!";
+
+      } catch (error) {
+        status.textContent = "Connection failed. Please check n8n and webhook settings.";
+        console.error(error);
+
+      } finally {
+        generateBtn.disabled = false;
+      }
+    });
+
+    copyBtn.addEventListener("click", async function() {
+      try {
+        await navigator.clipboard.writeText(resultBox.textContent);
+        status.textContent = "Email copied successfully!";
+      } catch (error) {
+        status.textContent = "Copy failed. Please select and copy the email manually.";
+      }
+    });
+  </script>
+
+</body>
+</html>
