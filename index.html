@@ -327,7 +327,7 @@
     form.addEventListener("submit", async function(event) {
       event.preventDefault();
 
-      if (webhookUrl === "PASTE_N8N_PRODUCTION_WEBHOOK_URL_HERE") {
+      if (webhookUrl === "http://localhost:5678/webhook-test/5930fdee-d94a-41ae-9811-4af73c76ad05") {
         status.textContent = "Please connect your n8n webhook first.";
         return;
       }
